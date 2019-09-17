@@ -1,19 +1,18 @@
-package com.example.android3;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.example.android3.view;
 
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.example.android3.R;
 import com.example.android3.presenter.Presenter;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends MvpAppCompatActivity implements MoxyView {
 
     @InjectPresenter
     Presenter presenter;
@@ -29,26 +28,41 @@ public class MainActivity extends AppCompatActivity {
         input = findViewById(R.id.input);
         output = findViewById(R.id.output);
 
-        initListeners();
+        initListener();
     }
 
-    private void initListeners() {
+    private void initListener() {
         input.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                Log.i("TextWatcher","before");
+                Log.i("TextWatcher", "before");
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Log.i("TextWatcher","on");
-                presenter.processTextInput(s.toString());
+                Log.i("TextWatcher", "on " + s);
+                presenter.processTextInput(s);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                Log.i("TextWatcher","after");
+                Log.i("TextWatcher", "after");
             }
         });
+    }
+
+    @Override
+    public void clearOutput() {
+        output.setText("");
+    }
+
+    @Override
+    public void clearInput() {
+        input.setText("");
+    }
+
+    @Override
+    public void appendText(String text) {
+        output.append(text);
     }
 }
