@@ -10,8 +10,9 @@ public class Model {
         return content;
     }
 
-    public String getByIndex(int index){
-        return content.get(index);
+    public List<String> getFromIndex(int index){
+        if (index > content.size())return content.subList(content.size() - index - 1,content.size() - 1);
+        return content;
     }
 
     public void addToContent(String str) {
