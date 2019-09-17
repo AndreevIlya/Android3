@@ -19,6 +19,7 @@ public class MainActivity extends MvpAppCompatActivity implements MoxyView {
 
     private EditText input;
     private TextView output;
+    private TextView smallOutput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +28,7 @@ public class MainActivity extends MvpAppCompatActivity implements MoxyView {
 
         input = findViewById(R.id.input);
         output = findViewById(R.id.output);
+        smallOutput = findViewById(R.id.output_small);
 
         initListener();
     }
@@ -54,6 +56,16 @@ public class MainActivity extends MvpAppCompatActivity implements MoxyView {
     @Override
     public void clearOutput() {
         output.setText("");
+    }
+
+    @Override
+    public void appendSmallText(String text) {
+        smallOutput.append(text);
+    }
+
+    @Override
+    public void clearSmallOutput() {
+        smallOutput.setText("");
     }
 
     @Override

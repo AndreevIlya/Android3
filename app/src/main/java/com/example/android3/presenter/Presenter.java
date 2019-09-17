@@ -15,6 +15,7 @@ import io.reactivex.observers.DisposableObserver;
 @InjectViewState
 public class Presenter extends MvpPresenter<MoxyView> {
 
+    private static final int SMALL_LENGTH = 5;
     private Model model;
 
     @Override
@@ -36,20 +37,28 @@ public class Presenter extends MvpPresenter<MoxyView> {
     public void processTextInput(CharSequence text){
         if(text.length() != 0 && text.charAt(text.length() - 1) == ' '){
             model.addToContent(text.toString());
-            getViewState().clearInput();
+            clearFields();
             List<String> data = model.getAll();
-            getViewState().clearOutput();
-            sendData(data);
+            sendData(data,false);
+            data = model.getFromIndex(SMALL_LENGTH);
+            sendData(data,true);
         }
     }
 
-    private void sendData(List<String> data){
+    private void clearFields() {
+        getViewState().clearInput();
+        getViewState().clearOutput();
+        getViewState().clearSmallOutput();
+    }
+
+    private void sendData(List<String> data, final boolean toSmall){
         Observable.fromIterable(data)
                 .subscribe(new DisposableObserver<String>() {
 
                     @Override
                     public void onNext(String s) {
-                        getViewState().appendText(s);
+                        if(toSmall) getViewState().appendSmallText(s);
+                        else getViewState().appendText(s);
                     }
 
                     @Override

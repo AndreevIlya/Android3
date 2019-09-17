@@ -11,7 +11,7 @@ public class Model {
     }
 
     public List<String> getFromIndex(int index){
-        if (index > content.size())return content.subList(content.size() - index - 1,content.size() - 1);
+        if (index < content.size())return content.subList(content.size() - index,content.size());
         return content;
     }
 
