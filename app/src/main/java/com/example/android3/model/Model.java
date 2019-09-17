@@ -1,4 +1,4 @@
-package com.example.android3.Model;
+package com.example.android3.model;
 
 import java.util.ArrayList;
 import java.util.List;
