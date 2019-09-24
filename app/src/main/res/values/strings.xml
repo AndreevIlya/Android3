@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Android3</string>
+    <string name="cancel">Cancel</string>
+    <string name="find_picture">Find picture</string>
+    <string name="click_to_begin">Click to find a picture and to begin conversion</string>
+    <string name="click_to_cancel">Conversion is in progress. Click to cancel.</string>
+    <string name="success">Conversion succeeded!</string>
 </resources>
