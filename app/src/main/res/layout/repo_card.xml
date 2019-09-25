@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/repo_name"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:layout_width="match_parent"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            tools:text="User name" />
+
+        <TextView
+            android:id="@+id/url"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:layout_width="match_parent"
+            tools:text="https://yandex.ru" />
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:layout_width="match_parent"
+            tools:text="This is my repo on something somewhere about something." />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
