@@ -56,6 +56,29 @@ public class MainActivity extends AppCompatActivity {
         initObservers();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        restorePresentation();
+    }
+
+    private void restorePresentation() {
+        String active = viewModel.getActivePresentation();
+        if (active != null) {
+            switch (active) {
+                case "user":
+                    onClickUser();
+                    break;
+                case "users":
+                    onClickUsers();
+                    break;
+                case "repos":
+                    onClickRepos();
+                    break;
+            }
+        }
+    }
+
     private void initObservers() {
         userObserver = user -> {
             resultUser.setText(getString(R.string.result_user,user.getName(),user.getId(),user.getUrl()));
@@ -97,36 +120,39 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onClickUser() {
-        //disposeObservers();
+        hideUserInfo();
         viewModel.userLiveData.observe(this,userObserver);
+        viewModel.setActivePresentation("user");
     }
 
     private void onClickUsers(){
         usersAdapter = new UsersAdapter();
         recyclerView.setAdapter(usersAdapter);
-        //disposeObservers();
+        hideUserInfo();
         viewModel.usersLiveData.observe(this,usersObserver);
+        viewModel.setActivePresentation("users");
     }
 
     private void onClickRepos(){
         reposAdapter = new ReposAdapter();
         recyclerView.setAdapter(reposAdapter);
-        //disposeObservers();
+        hideUserInfo();
         viewModel.reposLiveData.observe(this,reposObserver);
+        viewModel.setActivePresentation("repos");
     }
 
-    /*private void disposeObservers() {
-        if(viewModel.reposLiveData.hasObservers()){
+    private void hideUserInfo() {
+        /*if(viewModel.reposLiveData.hasObservers()){
             viewModel.reposLiveData.removeObserver(reposObserver);
         }
         if(viewModel.usersLiveData.hasObservers()){
             viewModel.usersLiveData.removeObserver(usersObserver);
-        }
+        }*/
         if(viewModel.userLiveData.hasObservers()){
-            viewModel.userLiveData.removeObserver(userObserver);
+            //viewModel.userLiveData.removeObserver(userObserver);
             resultUser.setText("");
             resultUser.setVisibility(View.INVISIBLE);
         }
-    }*/
+    }
 }
 

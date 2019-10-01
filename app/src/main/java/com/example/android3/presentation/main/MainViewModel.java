@@ -31,6 +31,8 @@ public class MainViewModel extends ViewModel implements LifecycleObserver {
     MutableLiveData<List<User>> usersLiveData = new MutableLiveData<>();
     MutableLiveData<List<Repo>> reposLiveData = new MutableLiveData<>();
 
+    private String activePresentation;
+
     public MainViewModel(UserInteractor ui, UsersInteractor usi, ReposInteractor ri, String name) {
         this.ui = ui;
         this.usi = usi;
@@ -58,5 +60,13 @@ public class MainViewModel extends ViewModel implements LifecycleObserver {
     protected void onCleared() {
         super.onCleared();
         compositeDisposable.dispose();
+    }
+
+    public String getActivePresentation() {
+        return activePresentation;
+    }
+
+    public void setActivePresentation(String activePresentation) {
+        this.activePresentation = activePresentation;
     }
 }
