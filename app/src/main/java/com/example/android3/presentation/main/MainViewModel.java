@@ -31,7 +31,7 @@ public class MainViewModel extends ViewModel implements LifecycleObserver {
     MutableLiveData<List<User>> usersLiveData = new MutableLiveData<>();
     MutableLiveData<List<Repo>> reposLiveData = new MutableLiveData<>();
 
-    MainViewModel(UserInteractor ui, UsersInteractor usi, ReposInteractor ri, String name) {
+    public MainViewModel(UserInteractor ui, UsersInteractor usi, ReposInteractor ri, String name) {
         this.ui = ui;
         this.usi = usi;
         this.ri = ri;

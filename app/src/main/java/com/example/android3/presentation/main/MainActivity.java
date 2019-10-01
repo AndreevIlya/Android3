@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,6 +26,7 @@ import com.example.android3.domain.interactors.UsersInteractor;
 import com.example.android3.domain.repositories.ReposRepo;
 import com.example.android3.domain.repositories.UserRepo;
 import com.example.android3.domain.repositories.UsersRepo;
+import com.example.android3.presentation.Factories.MainViewModelFactory;
 import com.example.android3.presentation.adapters.ReposAdapter;
 import com.example.android3.presentation.adapters.UsersAdapter;
 
@@ -78,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         UsersInteractor usi = new UsersInteractor(usersRepo);
         ReposInteractor ri = new ReposInteractor(reposRepo);
 
-        viewModel = new MainViewModel(ui,usi,ri,name);
+        viewModel = ViewModelProviders.of(this, new MainViewModelFactory(ui,usi,ri,name)).get(MainViewModel.class);
         getLifecycle().addObserver(viewModel);
     }
 
@@ -95,25 +97,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onClickUser() {
-        disposeObservers();
+        //disposeObservers();
         viewModel.userLiveData.observe(this,userObserver);
     }
 
     private void onClickUsers(){
         usersAdapter = new UsersAdapter();
         recyclerView.setAdapter(usersAdapter);
-        disposeObservers();
+        //disposeObservers();
         viewModel.usersLiveData.observe(this,usersObserver);
     }
 
     private void onClickRepos(){
         reposAdapter = new ReposAdapter();
         recyclerView.setAdapter(reposAdapter);
-        disposeObservers();
+        //disposeObservers();
         viewModel.reposLiveData.observe(this,reposObserver);
     }
 
-    private void disposeObservers() {
+    /*private void disposeObservers() {
         if(viewModel.reposLiveData.hasObservers()){
             viewModel.reposLiveData.removeObserver(reposObserver);
         }
@@ -125,6 +127,6 @@ public class MainActivity extends AppCompatActivity {
             resultUser.setText("");
             resultUser.setVisibility(View.INVISIBLE);
         }
-    }
+    }*/
 }
 
