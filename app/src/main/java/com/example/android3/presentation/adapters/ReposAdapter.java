@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.android3.R;
-import com.example.android3.data.models.Repo;
+import com.example.android3.data.entities.Repo;
 
 import java.util.ArrayList;
 import java.util.List;

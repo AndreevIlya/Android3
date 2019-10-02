@@ -1,7 +1,7 @@
 package com.example.android3.data.network;
 
-import com.example.android3.data.models.Repo;
-import com.example.android3.data.models.User;
+import com.example.android3.data.models.retrofit.RepoInRetrofit;
+import com.example.android3.data.models.retrofit.UserInRetrofit;
 
 import java.util.List;
 
@@ -9,25 +9,25 @@ import io.reactivex.Single;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.Path;
-public interface Api {
+public interface RetrofitProvider {
     @Headers({
             "Accept: application/vnd.github.v3+json",
-            "User-Agent: Android3"
+            "UserInRetrofit-Agent: Android3"
     })
     @GET("users")
-    Single<List<User>> loadUsers();
+    Single<List<UserInRetrofit>> loadUsers();
 
     @Headers({
             "Accept: application/vnd.github.v3+json",
-            "User-Agent: Android3"
+            "UserInRetrofit-Agent: Android3"
     })
     @GET("users/{user}")
-    Single<User> loadUser(@Path("user") String user);
+    Single<UserInRetrofit> loadUser(@Path("user") String user);
 
     @Headers({
             "Accept: application/vnd.github.v3+json",
-            "User-Agent: Android3"
+            "UserInRetrofit-Agent: Android3"
     })
     @GET("users/{user}/repos")
-    Single<List<Repo>> loadRepos(@Path("user") String user);
+    Single<List<RepoInRetrofit>> loadRepos(@Path("user") String user);
 }

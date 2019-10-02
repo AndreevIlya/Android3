@@ -1,21 +1,20 @@
 package com.example.android3.domain.interactors;
 
-import com.example.android3.domain.repositories.ReposRepo;
-
-import com.example.android3.data.models.Repo;
+import com.example.android3.data.entities.Repo;
+import com.example.android3.domain.repositories.Repos;
 
 import java.util.List;
 
 import io.reactivex.Single;
 
 public class ReposInteractor {
-    private ReposRepo reposRepo;
+    private Repos repos;
 
-    public ReposInteractor(ReposRepo reposRepo) {
-        this.reposRepo = reposRepo;
+    public ReposInteractor(Repos repos) {
+        this.repos = repos;
     }
 
     public Single<List<Repo>> getRepos(String name){
-        return reposRepo.getRepos(name);
+        return repos.getRepos(name);
     }
 }
