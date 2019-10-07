@@ -8,8 +8,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ViewModel;
 
-import com.example.android3.data.models.Repo;
-import com.example.android3.data.models.User;
+import com.example.android3.data.entities.Repo;
+import com.example.android3.data.entities.User;
 import com.example.android3.domain.interactors.ReposInteractor;
 import com.example.android3.domain.interactors.UserInteractor;
 import com.example.android3.domain.interactors.UsersInteractor;
@@ -31,7 +31,9 @@ public class MainViewModel extends ViewModel implements LifecycleObserver {
     MutableLiveData<List<User>> usersLiveData = new MutableLiveData<>();
     MutableLiveData<List<Repo>> reposLiveData = new MutableLiveData<>();
 
-    MainViewModel(UserInteractor ui, UsersInteractor usi, ReposInteractor ri, String name) {
+    private String activePresentation;
+
+    public MainViewModel(UserInteractor ui, UsersInteractor usi, ReposInteractor ri, String name) {
         this.ui = ui;
         this.usi = usi;
         this.ri = ri;
@@ -58,5 +60,13 @@ public class MainViewModel extends ViewModel implements LifecycleObserver {
     protected void onCleared() {
         super.onCleared();
         compositeDisposable.dispose();
+    }
+
+    String getActivePresentation() {
+        return activePresentation;
+    }
+
+    void setActivePresentation(String activePresentation) {
+        this.activePresentation = activePresentation;
     }
 }

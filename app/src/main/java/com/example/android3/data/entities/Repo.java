@@ -1,20 +1,17 @@
-package com.example.android3.data.models;
-
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+package com.example.android3.data.entities;
 
 public class Repo {
-    @SerializedName("name")
-    @Expose
     private String name;
-
-    @SerializedName("html_url")
-    @Expose
     private String url;
-
-    @SerializedName("description")
-    @Expose
     private String description;
+
+    public Repo(){}
+
+    public Repo(String name, String url, String description) {
+        this.name = name;
+        this.url = url;
+        this.description = description;
+    }
 
     public String getDescription() {
         return description;

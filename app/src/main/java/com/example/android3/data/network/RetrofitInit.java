@@ -7,18 +7,18 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitInit {
     private static final String BASE_URL = "https://api.github.com/";
 
-    private static Api api;
+    private static RetrofitProvider retrofitProvider;
 
-    public static synchronized Api newApiInstance() {
-        if (api == null) {
-            api = new Retrofit.Builder()
+    public static synchronized RetrofitProvider newApiInstance() {
+        if (retrofitProvider == null) {
+            retrofitProvider = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .build()
-                    .create(Api.class);
+                    .create(RetrofitProvider.class);
         }
-        return api;
+        return retrofitProvider;
     }
 
 }

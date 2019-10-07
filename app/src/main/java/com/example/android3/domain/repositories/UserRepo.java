@@ -1,6 +1,6 @@
 package com.example.android3.domain.repositories;
 
-import com.example.android3.data.models.User;
+import com.example.android3.data.entities.User;
 
 import io.reactivex.Single;
 

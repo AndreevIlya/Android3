@@ -1,20 +1,20 @@
 package com.example.android3.domain.interactors;
 
-import com.example.android3.data.models.User;
-import com.example.android3.domain.repositories.UsersRepo;
+import com.example.android3.data.entities.User;
+import com.example.android3.domain.repositories.Users;
 
 import java.util.List;
 
 import io.reactivex.Single;
 
 public class UsersInteractor {
-    private UsersRepo usersRepo;
+    private Users users;
 
-    public UsersInteractor(UsersRepo usersRepo) {
-        this.usersRepo = usersRepo;
+    public UsersInteractor(Users users) {
+        this.users = users;
     }
 
     public Single<List<User>> getUsers(){
-        return usersRepo.getUsers();
+        return users.getUsers();
     }
 }
