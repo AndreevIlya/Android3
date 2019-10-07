@@ -16,6 +16,7 @@ import com.example.android3.domain.interactors.UsersInteractor;
 
 import java.util.List;
 
+import io.reactivex.Single;
 import io.reactivex.disposables.CompositeDisposable;
 
 public class MainViewModel extends ViewModel implements LifecycleObserver {
@@ -25,13 +26,15 @@ public class MainViewModel extends ViewModel implements LifecycleObserver {
     private ReposInteractor ri;
     private String name;
 
+    private String activePresentation = "none";
+
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     MutableLiveData<User> userLiveData = new MutableLiveData<>();
     MutableLiveData<List<User>> usersLiveData = new MutableLiveData<>();
     MutableLiveData<List<Repo>> reposLiveData = new MutableLiveData<>();
+    MutableLiveData<String> activePresentationLiveData = new MutableLiveData<>();
 
-    private String activePresentation;
 
     public MainViewModel(UserInteractor ui, UsersInteractor usi, ReposInteractor ri, String name) {
         this.ui = ui;
@@ -54,6 +57,10 @@ public class MainViewModel extends ViewModel implements LifecycleObserver {
                 (result) -> reposLiveData.postValue(result),
                 (e) -> Log.e("ViewModel","Submit on repos failed.",e)
         ));
+        compositeDisposable.add(getActivePresentationObservable().subscribe(
+                (result) -> activePresentationLiveData.postValue(activePresentation),
+                (e) -> Log.e("ViewModel","Submit on active failed.",e)
+        ));
     }
 
     @Override
@@ -62,11 +69,7 @@ public class MainViewModel extends ViewModel implements LifecycleObserver {
         compositeDisposable.dispose();
     }
 
-    String getActivePresentation() {
-        return activePresentation;
-    }
-
-    void setActivePresentation(String activePresentation) {
-        this.activePresentation = activePresentation;
+    private Single<String> getActivePresentationObservable(){
+        return Single.fromCallable(() -> activePresentation);
     }
 }

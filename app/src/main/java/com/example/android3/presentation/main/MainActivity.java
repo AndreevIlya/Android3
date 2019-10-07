@@ -33,7 +33,10 @@ import com.example.android3.presentation.Factories.MainViewModelFactory;
 import com.example.android3.presentation.adapters.ReposAdapter;
 import com.example.android3.presentation.adapters.UsersAdapter;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
     private ProgressBar progressBar;
@@ -47,13 +50,15 @@ public class MainActivity extends AppCompatActivity {
     private Observer<User> userObserver;
     private Observer<List<User>> usersObserver;
     private Observer<List<Repo>> reposObserver;
+    private Observer<String> activeStateObserver;
+
+    private Map<String, ActionOnClick> actionsMap = initActionsMap();
 
     private static final String name = "AndreevIlya";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //SugarContext.init(getApplicationContext());
         initViews();
         initViewModel();
         initRecyclesView();
@@ -63,30 +68,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        restorePresentation();
-    }
-
-    /*@Override
-    protected void onDestroy() {
-        super.onDestroy();
-        SugarContext.terminate();
-    }*/
-
-    private void restorePresentation() {
-        String active = viewModel.getActivePresentation();
-        if (active != null) {
-            switch (active) {
-                case "user":
-                    onClickUser();
-                    break;
-                case "users":
-                    onClickUsers();
-                    break;
-                case "repos":
-                    onClickRepos();
-                    break;
-            }
-        }
+        viewModel.activePresentationLiveData.observe(this,activeStateObserver);
     }
 
     private void initObservers() {
@@ -96,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
         };
         usersObserver = users -> usersAdapter.setUsers(users);
         reposObserver = repos -> reposAdapter.setRepos(repos);
+        activeStateObserver = active -> Objects.requireNonNull(actionsMap.get(active)).doOnClick();
     }
 
     private void initRecyclesView() {
@@ -126,15 +109,13 @@ public class MainActivity extends AppCompatActivity {
         Button getUserBtn = findViewById(R.id.getUser);
         Button getUsersBtn = findViewById(R.id.getUsers);
         Button getReposBtn = findViewById(R.id.getRepos);
-        getUserBtn.setOnClickListener((v) -> onClickUser());
-        getUsersBtn.setOnClickListener((v) -> onClickUsers());
-        getReposBtn.setOnClickListener((v) -> onClickRepos());
+        getUserBtn.setOnClickListener((v) -> viewModel.activePresentationLiveData.setValue("user"));
+        getUsersBtn.setOnClickListener((v) -> viewModel.activePresentationLiveData.setValue("users"));
+        getReposBtn.setOnClickListener((v) -> viewModel.activePresentationLiveData.setValue("repos"));
     }
 
     private void onClickUser() {
-        hideUserInfo();
         viewModel.userLiveData.observe(this,userObserver);
-        viewModel.setActivePresentation("user");
     }
 
     private void onClickUsers(){
@@ -142,7 +123,6 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(usersAdapter);
         hideUserInfo();
         viewModel.usersLiveData.observe(this,usersObserver);
-        viewModel.setActivePresentation("users");
     }
 
     private void onClickRepos(){
@@ -150,21 +130,26 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(reposAdapter);
         hideUserInfo();
         viewModel.reposLiveData.observe(this,reposObserver);
-        viewModel.setActivePresentation("repos");
     }
 
     private void hideUserInfo() {
-        /*if(viewModel.reposLiveData.hasObservers()){
-            viewModel.reposLiveData.removeObserver(reposObserver);
-        }
-        if(viewModel.usersLiveData.hasObservers()){
-            viewModel.usersLiveData.removeObserver(usersObserver);
-        }*/
         if(viewModel.userLiveData.hasObservers()){
-            //viewModel.userLiveData.removeObserver(userObserver);
             resultUser.setText("");
             resultUser.setVisibility(View.INVISIBLE);
         }
+    }
+
+    private Map<String, ActionOnClick> initActionsMap() {
+        Map<String, ActionOnClick> map = new HashMap<>();
+        map.put("user", this::onClickUser);
+        map.put("users", this::onClickUsers);
+        map.put("repos", this::onClickRepos);
+        map.put("none", () -> {});
+        return map;
+    }
+
+    private interface ActionOnClick{
+        void doOnClick();
     }
 }
 
