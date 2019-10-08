@@ -19,9 +19,6 @@ import com.example.android3.di.main.AdaptersModule;
 import com.example.android3.di.main.DaggerMainComponent;
 import com.example.android3.di.main.InteractorsModule;
 import com.example.android3.di.main.ViewModelModule;
-import com.example.android3.domain.interactors.ReposInteractor;
-import com.example.android3.domain.interactors.UserInteractor;
-import com.example.android3.domain.interactors.UsersInteractor;
 import com.example.android3.presentation.adapters.ReposAdapter;
 import com.example.android3.presentation.adapters.UsersAdapter;
 
@@ -44,12 +41,12 @@ public class MainActivity extends AppCompatActivity {
 
     private Map<String, ActionOnClick> actionsMap = initActionsMap();
 
-    @Inject UserInteractor ui;
-    @Inject UsersInteractor usi;
-    @Inject ReposInteractor ri;
-    @Inject UsersAdapter usersAdapter;
-    @Inject ReposAdapter reposAdapter;
-    @Inject MainViewModel viewModel;
+    @Inject
+    UsersAdapter usersAdapter;
+    @Inject
+    ReposAdapter reposAdapter;
+    @Inject
+    MainViewModel viewModel;
 
     public static final String NAME = "AndreevIlya";
 
@@ -67,12 +64,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        viewModel.activePresentationLiveData.observe(this,activeStateObserver);
+        viewModel.activePresentationLiveData.observe(this, activeStateObserver);
     }
 
     private void initObservers() {
         userObserver = user -> {
-            resultUser.setText(getString(R.string.result_user,user.getName(),user.getId(),user.getUrl()));
+            resultUser.setText(getString(R.string.result_user, user.getName(), user.getId(), user.getUrl()));
             resultUser.setVisibility(View.VISIBLE);
         };
         usersObserver = users -> usersAdapter.setUsers(users);
@@ -86,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initDependencies() {
-        AppComponent appComp = ((MainApp)getApplication()).getAppComponent();
+        AppComponent appComp = ((MainApp) getApplication()).getAppComponent();
 
         DaggerMainComponent
                 .builder()
@@ -111,26 +108,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onClickUser() {
-        viewModel.userLiveData.observe(this,userObserver);
+        viewModel.userLiveData.observe(this, userObserver);
+        recyclerView.setAdapter(null);
+        resultUser.setVisibility(View.VISIBLE);
     }
 
-    private void onClickUsers(){
+    private void onClickUsers() {
         recyclerView.setAdapter(usersAdapter);
         hideUserInfo();
-        viewModel.usersLiveData.observe(this,usersObserver);
+        viewModel.usersLiveData.observe(this, usersObserver);
     }
 
-    private void onClickRepos(){
+    private void onClickRepos() {
         recyclerView.setAdapter(reposAdapter);
         hideUserInfo();
-        viewModel.reposLiveData.observe(this,reposObserver);
+        viewModel.reposLiveData.observe(this, reposObserver);
     }
 
     private void hideUserInfo() {
-        if(viewModel.userLiveData.hasObservers()){
-            resultUser.setText("");
-            resultUser.setVisibility(View.INVISIBLE);
-        }
+        resultUser.setText("");
+        resultUser.setVisibility(View.INVISIBLE);
     }
 
     private Map<String, ActionOnClick> initActionsMap() {
@@ -138,11 +135,12 @@ public class MainActivity extends AppCompatActivity {
         map.put("user", this::onClickUser);
         map.put("users", this::onClickUsers);
         map.put("repos", this::onClickRepos);
-        map.put("none", () -> {});
+        map.put("none", () -> {
+        });
         return map;
     }
 
-    private interface ActionOnClick{
+    private interface ActionOnClick {
         void doOnClick();
     }
 }
