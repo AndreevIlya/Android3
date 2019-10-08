@@ -8,28 +8,20 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.android3.R;
-import com.example.android3.data.database.DBProvider;
-import com.example.android3.data.database.RepoSugarImpl;
-import com.example.android3.data.database.UserSugarImpl;
 import com.example.android3.data.entities.Repo;
 import com.example.android3.data.entities.User;
-import com.example.android3.data.network.RetrofitInit;
-import com.example.android3.data.network.RetrofitProvider;
-import com.example.android3.data.repositories.ReposImpl;
-import com.example.android3.data.repositories.UserImpl;
-import com.example.android3.data.repositories.UsersImpl;
+import com.example.android3.di.app.AppComponent;
+import com.example.android3.di.main.AdaptersModule;
+import com.example.android3.di.main.DaggerMainComponent;
+import com.example.android3.di.main.InteractorsModule;
+import com.example.android3.di.main.ViewModelModule;
 import com.example.android3.domain.interactors.ReposInteractor;
 import com.example.android3.domain.interactors.UserInteractor;
 import com.example.android3.domain.interactors.UsersInteractor;
-import com.example.android3.domain.repositories.Repos;
-import com.example.android3.domain.repositories.UserRepo;
-import com.example.android3.domain.repositories.Users;
-import com.example.android3.presentation.Factories.MainViewModelFactory;
 import com.example.android3.presentation.adapters.ReposAdapter;
 import com.example.android3.presentation.adapters.UsersAdapter;
 
@@ -38,14 +30,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import javax.inject.Inject;
+
 public class MainActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private TextView resultUser;
     private RecyclerView recyclerView;
-
-    private MainViewModel viewModel;
-    private UsersAdapter usersAdapter;
-    private ReposAdapter reposAdapter;
 
     private Observer<User> userObserver;
     private Observer<List<User>> usersObserver;
@@ -54,15 +44,24 @@ public class MainActivity extends AppCompatActivity {
 
     private Map<String, ActionOnClick> actionsMap = initActionsMap();
 
-    private static final String name = "AndreevIlya";
+    @Inject UserInteractor ui;
+    @Inject UsersInteractor usi;
+    @Inject ReposInteractor ri;
+    @Inject UsersAdapter usersAdapter;
+    @Inject ReposAdapter reposAdapter;
+    @Inject MainViewModel viewModel;
+
+    public static final String NAME = "AndreevIlya";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initViews();
-        initViewModel();
+        initDependencies();
         initRecyclesView();
         initObservers();
+
+        getLifecycle().addObserver(viewModel);
     }
 
     @Override
@@ -86,20 +85,17 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    private void initViewModel() {
-        RetrofitProvider retrofitProvider = RetrofitInit.newApiInstance();
-        DBProvider<User,User> userSugarDB = new UserSugarImpl();
-        DBProvider<Repo,Repo> repoSugarDB = new RepoSugarImpl();
-        UserRepo user = new UserImpl(retrofitProvider, userSugarDB);
-        Users users = new UsersImpl(retrofitProvider, userSugarDB);
-        Repos repos = new ReposImpl(retrofitProvider, repoSugarDB);
+    private void initDependencies() {
+        AppComponent appComp = ((MainApp)getApplication()).getAppComponent();
 
-        UserInteractor ui = new UserInteractor(user);
-        UsersInteractor usi = new UsersInteractor(users);
-        ReposInteractor ri = new ReposInteractor(repos);
-
-        viewModel = ViewModelProviders.of(this, new MainViewModelFactory(ui,usi,ri,name)).get(MainViewModel.class);
-        getLifecycle().addObserver(viewModel);
+        DaggerMainComponent
+                .builder()
+                .appComponent(appComp)
+                .interactorsModule(new InteractorsModule())
+                .adaptersModule(new AdaptersModule())
+                .viewModelModule(new ViewModelModule(this))
+                .build()
+                .inject(this);
     }
 
     private void initViews() {
@@ -119,14 +115,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onClickUsers(){
-        usersAdapter = new UsersAdapter();
         recyclerView.setAdapter(usersAdapter);
         hideUserInfo();
         viewModel.usersLiveData.observe(this,usersObserver);
     }
 
     private void onClickRepos(){
-        reposAdapter = new ReposAdapter();
         recyclerView.setAdapter(reposAdapter);
         hideUserInfo();
         viewModel.reposLiveData.observe(this,reposObserver);
