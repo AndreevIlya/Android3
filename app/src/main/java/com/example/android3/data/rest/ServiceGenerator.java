@@ -1,6 +1,7 @@
 package com.example.android3.data.rest;
 
 import com.example.android3.BuildConfig;
+import com.example.android3.data.Endpoints;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -10,10 +11,10 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class ServiceGenerator {
+public class ServiceGenerator implements ServiceGeneratorInterface<Endpoints> {
     private Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 
-    public <S> S createService(Class<S> serviceClass) {
+    public Endpoints createService(Class<Endpoints> serviceClass) {
         return new Retrofit.Builder()
                 .baseUrl("https://api.github.com")
                 .addConverterFactory(GsonConverterFactory.create(gson))
