@@ -1,6 +1,7 @@
 package com.example.android3;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -11,6 +12,8 @@ import androidx.test.rule.ActivityTestRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.ArrayList;
 
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.notNullValue;
@@ -38,10 +41,51 @@ public class ExampleInstrumentedTest {
     @Test
     public void ensureProgressViewIsShowing() {
         MainActivity activity = rule.getActivity();
-        View viewById = activity.findViewById(R.id.loadingView);
-        assertThat(viewById, notNullValue());
-        assertThat(viewById, instanceOf(ProgressBar.class));
+        View progress = activity.findViewById(R.id.loadingView);
+        View content = activity.findViewById(R.id.contentView);
+        View empty = activity.findViewById(R.id.emptyView);
+        assertThat(progress, notNullValue());
+        assertThat(progress, instanceOf(ProgressBar.class));
+        assertThat(content, notNullValue());
+        assertThat(empty, notNullValue());
         activity.showLoading();
-        assertEquals(viewById.getVisibility(), View.VISIBLE);
+        assertEquals(progress.getVisibility(), View.VISIBLE);
+        assertEquals(content.getVisibility(), View.GONE);
+        assertEquals(empty.getVisibility(), View.GONE);
+    }
+
+    @Test
+    public void ensureProgressViewIsHidden() {
+        MainActivity activity = rule.getActivity();
+        View progress = activity.findViewById(R.id.loadingView);
+        assertThat(progress, notNullValue());
+        assertThat(progress, instanceOf(ProgressBar.class));
+        Log.i("sdagfa", "regfrewg");
+        activity.hideLoading();
+        assertEquals(progress.getVisibility(), View.GONE);
+    }
+
+    @Test
+    public void ensureContentIsEmpty() {
+        MainActivity activity = rule.getActivity();
+        View content = activity.findViewById(R.id.contentView);
+        View empty = activity.findViewById(R.id.emptyView);
+        assertThat(content, notNullValue());
+        assertThat(empty, notNullValue());
+        activity.showEmptyState();
+        assertEquals(content.getVisibility(), View.GONE);
+        assertEquals(empty.getVisibility(), View.VISIBLE);
+    }
+
+    @Test
+    public void ensureContentIsShowing() {
+        MainActivity activity = rule.getActivity();
+        View content = activity.findViewById(R.id.contentView);
+        View empty = activity.findViewById(R.id.emptyView);
+        assertThat(content, notNullValue());
+        assertThat(empty, notNullValue());
+        activity.showRepoList(new ArrayList<>());
+        assertEquals(content.getVisibility(), View.VISIBLE);
+        assertEquals(empty.getVisibility(), View.GONE);
     }
 }
