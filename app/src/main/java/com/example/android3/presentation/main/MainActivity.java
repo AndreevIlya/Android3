@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.crashlytics.android.Crashlytics;
 import com.example.android3.R;
 import com.example.android3.data.entities.Repo;
 import com.example.android3.data.entities.User;
@@ -71,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
         userObserver = user -> {
             resultUser.setText(getString(R.string.result_user, user.getName(), user.getId(), user.getUrl()));
             resultUser.setVisibility(View.VISIBLE);
+            Crashlytics.getInstance().crash();
         };
         usersObserver = users -> usersAdapter.setUsers(users);
         reposObserver = repos -> reposAdapter.setRepos(repos);
