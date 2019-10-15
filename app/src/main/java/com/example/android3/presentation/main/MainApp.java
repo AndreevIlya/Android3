@@ -7,6 +7,7 @@ import com.example.android3.di.app.DBModule;
 import com.example.android3.di.app.DaggerAppComponent;
 import com.example.android3.di.app.RepoModule;
 import com.example.android3.di.app.RetrofitModule;
+import com.facebook.stetho.Stetho;
 import com.orm.SugarContext;
 
 public class MainApp extends Application {
@@ -24,6 +25,7 @@ public class MainApp extends Application {
                 .dBModule(new DBModule())
                 .repoModule(new RepoModule())
                 .build();
+        Stetho.initializeWithDefaults(this);
     }
 
     @Override
