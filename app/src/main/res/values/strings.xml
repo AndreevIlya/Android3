@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Android3</string>
+    <string name="get_user">Retrieve data about AndreevIlya Github user</string>
+    <string name="get_users">Retrieve data about all users</string>
+    <string name="get_repos">Retrieve repos of AndreevIlya</string>
+    <string name="result_user">"User: %s \nID: %s \n URL: %s"</string>
 </resources>
