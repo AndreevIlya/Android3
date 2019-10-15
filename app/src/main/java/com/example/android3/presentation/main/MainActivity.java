@@ -102,9 +102,9 @@ public class MainActivity extends AppCompatActivity {
         Button getUserBtn = findViewById(R.id.getUser);
         Button getUsersBtn = findViewById(R.id.getUsers);
         Button getReposBtn = findViewById(R.id.getRepos);
-        getUserBtn.setOnClickListener((v) -> viewModel.activePresentationLiveData.setValue("user"));
-        getUsersBtn.setOnClickListener((v) -> viewModel.activePresentationLiveData.setValue("users"));
-        getReposBtn.setOnClickListener((v) -> viewModel.activePresentationLiveData.setValue("repos"));
+        getUserBtn.setOnClickListener((v) -> viewModel.saveActiveState("user"));
+        getUsersBtn.setOnClickListener((v) -> viewModel.saveActiveState("users"));
+        getReposBtn.setOnClickListener((v) -> viewModel.saveActiveState("repos"));
     }
 
     private void onClickUser() {
@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void hideUserInfo() {
         resultUser.setText("");
-        resultUser.setVisibility(View.INVISIBLE);
+        resultUser.setVisibility(View.GONE);
     }
 
     private Map<String, ActionOnClick> initActionsMap() {

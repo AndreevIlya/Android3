@@ -72,4 +72,8 @@ public class MainViewModel extends ViewModel implements LifecycleObserver {
     private Single<String> getActivePresentationObservable(){
         return Single.fromCallable(() -> activePresentation);
     }
+
+    void saveActiveState(String state){
+        activePresentationLiveData.setValue(state);
+    }
 }
